@@ -118,7 +118,7 @@ Can you determine which Rigid Body will collide and which won't?
 A constraint component connects two rigid bodies together or connects a rigid body to a static point in the world. 
 <br>
 The types of joints supported by Ammo.js 
-#### Point to Poimt (P2P
+#### Point to Point (P2P)
 Point to point constraint limits the translation so that the local pivot points of two rigid bodies match in worldspace. A chain of rigid bodies can be connected using this constraint.
 
 ![P2P Constraint](./images/P2P.png)
