@@ -138,4 +138,4 @@ This is a special point to point constraint that adds cone and twist axis limits
 ---
 ## Coding and Explanation
 
-To demonstrate the Physical Simulation using Three.js and Ammo.js, Follow this 4 ~~SUPERHARD~~ Simple Steps!
+To demonstrate the Physical Simulation using Three.js and Ammo.js, Follow this 4 ~~distressing~~ simple steps!
