@@ -1,12 +1,15 @@
 # Introduction to Physical Simulations with Three.js and Ammo.js
 
 ## Contents of the Presentation
+
 * [Introduction to Ammo.js](#introduction-to-ammo.js)
 * [Terms in Ammo.js](#terms-in-ammo.js)
-* [Coding and Explanation]()
+* [Coding and Explanation](#coding-and-explanation)
 
 ## Introduction to Ammo.js
+
 ### What is Ammo.js 🤔
+
 Ammo.js is one of the most powerful JavaScript Physics Engine available, created to help the user create two dimensional Physics Simulation to an object.
 - Ammo.js has an interesting pedigree as it actually is a direct JavaScript port of *Bullet3D*.
 
@@ -17,6 +20,7 @@ Ammo.js is one of the most powerful JavaScript Physics Engine available, created
 - The creator of Ammo.js is never stated, but the code can be found in the [Github Repository](https://github.com/kripken/ammo.js) created by an user **kripken** with 40+ Authors which contribute in the creation of this engine.
 
 ## Terms in Ammo.js
+
 ### Physical World 🌍
 
 There has to be a world that obeys the laws of physics except that in a parallel Universe that has its own set of Physical Laws.
@@ -54,6 +58,7 @@ Examples of **Rigid Body**
 ### Types of Rigid Body
 
 #### Rigid Body : Dynamic
+
 Dynamic rigid bodies have mass greater than zero and will move around being affected by the forces and laws governing the physics world. The object will be affected by gravity, impulse, and would respond appropriately to collisions from other bodies.
 
 Examples :
@@ -61,6 +66,7 @@ Examples :
 - FPS Shooting Game
 
 #### Rigid Body : Static
+
 Static rigid bodies are just what their name says which is static and can never be moved by the user. The requirements to be a static rigid body is having the mass of 0.
 
 Examples :
@@ -68,6 +74,7 @@ Examples :
 - The Ground
 
 #### Rigid Body : Kinematic
+
 Kinematic objects are static objects that can be moved by the user. The object will not be affected by any force from the physics world not even gravity, they are just there.
 
 Example :
@@ -76,14 +83,17 @@ Example :
 ---
 
 ### Collision
+
 Collision happens when two or more object encounters resulting in exchange or transformation of energy. In this Physics, there are 2 topics that covers the collision
 
 #### Collision Detection
+
 Collision Detection is about detecting when two or more objects collide.
 Example :
 - Deducting the health of the boss for every successful attack (The sword/bullet collide with the boss body).
 
 #### Collision Filtering
+
 Collision Filtering sets which objects should collide and which should not. This is important to set an object which can collide and which doesn't. In Ammo.js, *Masks* is used for this kind of condition.<br>
 Every rigid body in ammo.js has a bitwise masks collision group and collision mask. The collision group represents the collision identity group of the rigid body while the collision mask represents other collision identity groups that should be collided with. 
 
@@ -97,7 +107,10 @@ C | 0101 | 0011
 
 Can you determine which Rigid Body will collide and which won't?
 
+---
+
 ### Constraints
+
 A constraint component connects two rigid bodies together or connects a rigid body to a static point in the world. 
 <br>
 The types of joints supported by Ammo.js 
@@ -107,15 +120,22 @@ Point to point constraint limits the translation so that the local pivot points 
 ![P2P Constraint](./images/P2P.png)
 
 #### Hinge Constraints
+
 Hinge constraint/ Revolute joint restricts two additional angular degrees of freedom, so the body can only rotate around one axis, the hinge axis. This can be useful to represent doors or wheels rotating around one axis.
 
 ![Hinge Constraint](./images/Hinge.png)
 
 #### Slider Constraints
+
 The slider constraint allows the body to rotate around one axis and translate along this axis.
 
 ![Slider Constraint](./images/Slider.png)
 
 #### Cone Twist Constraints
+
 This is a special point to point constraint that adds cone and twist axis limits. x-axis serves as a twist axis. This is useful for making joints like the upper arm’s joint.
 
+---
+## Coding and Explanation
+
+To demonstrate the Physical Simulation using Three.js and Ammo.js, Follow this 4 ~~SUPERHARD~~ Simple Steps!
