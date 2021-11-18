@@ -143,3 +143,197 @@ This is a special point to point constraint that adds cone and twist axis limits
 ## Coding and Explanation
 
 To demonstrate the Physical Simulation using Three.js and Ammo.js, Follow this 4 ~~distressing~~ simple steps!
+
+#### 1. Setting Up Workspace with Three.js and Ammo.js
+
+##### - Obtain Three.js Code File
+
+The Code File of Three.js can be copied or forked from [Three.js Repository](https://threejs.org/build/three.js) , then paste it in a file “Three.js” or “Three.main.js” inside the folder "js" in the folder.
+
+##### - Obtain Ammo.js Code File
+
+The Code File of Ammo.js can be obtained by downloading the repository from [Ammo.js Repository](https://github.com/kripken/ammo.js), look up to the folder "build" and then extract/copy the file *ammo.js* to your desired folder and name it "ammo.js".
+
+##### - Create HTML File
+Next step is to make a HTML File in the folder of your desire, outside the folder "js" and then set it up to a usual HTML.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics JS with Ammojs</title>
+    <style>
+        body 
+        { 
+            margin: 0; 
+        }
+    </style>
+</head>
+<body>
+    <script src="js/three.js"></script>
+    <script src="js/ammo.js"></script>
+    <script>
+
+        Ammo().then( start )
+        
+        function start()
+        {
+
+        }
+    
+    </script>
+</body>
+</html>
+```
+
+Code is represented as HTML with the part where Ammo.js is initialized through `Ammo()` which is a method that makes sure every necessary thing needed by ammo.js is initialized and ready to used. But, this initialization returns nothing in the browser, but if no errors are logged in the console then it’s good to go.
+
+
+#### 2. Setting up Physical World
+
+As the purpose setup Physical World as the place where the Physical Simulation will take places are
+
+##### - Declare the variables
+
+Declare the variable above the ammo.js Initialization 
+```js 
+let physicsWorld 
+```
+
+##### - Add the function to set up Physical World
+
+Adding the function with the code below
+```js
+function setupPhysicsWorld()
+{
+
+    let collisionConfiguration  = new Ammo.btDefaultCollisionConfiguration(),
+        dispatcher              = new Ammo.btCollisionDispatcher(collisionConfiguration),
+        overlappingPairCache    = new Ammo.btDbvtBroadphase(),
+        solver                  = new Ammo.btSequentialImpulseConstraintSolver();
+
+    physicsWorld           = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+    physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
+
+}
+```
+The explanation of the code above are :
+
+###### Ammo.btDbvtBroadphase 
+
+This function is used to implement a broad phase algorithm. Broad phase algorithm usually uses the bounding boxes of objects in the world to quickly compute a conservative approximate list of colliding pairs. The list will include every pair of objects that are colliding, but it may also include pairs of objects whose bounding boxes intersect but are still not close enough to collide.
+
+###### Ammo.btDefaultCollisionConfiguration
+
+The function is used to implement collision configuration which allows to fine tune the algorithms used for the full (not broadphase) collision detection.
+
+###### Ammo.btCollisionDispatcher
+
+The class collision dispatcher is used to register a callback that filters overlapping broadphase proxies so that the collisions are not processed by the rest of the system.
+
+###### Ammo.btSequentialImpulseConstraintSolver
+
+This class is what causes the objects to interact properly, taking into account gravity, game logic supplied forces, collisions, and hinge constraints.
+
+###### Ammo.btDiscreteDynamicsWorld
+
+This is the dynamic world, our physics world. It does come in other variants like ```js Ammo.btSoftRigidDynamicsWorld``` for soft body simulation.
+From the last line we can see where we set the gravity of our world by calling ```js setGravity()``` method of physicsWorld and passing in an `ammojs vector3` for the gravity. 
+
+##### - Add the call to the start() method 
+
+Add a call in the empty start() ```js setupPhysicsWorld()``` 
+
+##### - Add the function to Setup Graphics
+
+Add a Three.js environment to add visuals by adding *scene*, *camera* and *renderer* above the ammo.js initialization
+
+```js let physicsWorld, scene, camera, renderer;```
+
+ After the function `setupPhysicsWorld`, add the function `setupGraphics()`
+
+```js
+function setupGraphics(){
+
+    clock = new THREE.Clock();
+
+    //create the scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color( 0xffffff );
+
+    //create camera
+    camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.2, 5000 );
+    camera.position.set( 0, 30, 70 );
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    //Add directional light
+    let dirLight = new THREE.DirectionalLight( 0xffffff , 1);
+    dirLight.color.setHSL( 0.1, 1, 0.95 );
+    dirLight.position.set( -1, 1.75, 1 );
+    dirLight.position.multiplyScalar( 100 );
+    scene.add( dirLight );
+
+    dirLight.castShadow = true;
+
+    dirLight.shadow.mapSize.width = 2048;
+    dirLight.shadow.mapSize.height = 2048;
+
+    let d = 50;
+
+    dirLight.shadow.camera.left = -d;
+    dirLight.shadow.camera.right = d;
+    dirLight.shadow.camera.top = d;
+    dirLight.shadow.camera.bottom = -d;
+
+    dirLight.shadow.camera.far = 13500;
+
+    //Setup the renderer
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setClearColor( 0xbfd1e5 );
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    renderer.gammaInput = true;
+    renderer.gammaOutput = true;
+
+    renderer.shadowMap.enabled = true;
+
+}
+
+
+function renderFrame(){
+
+    let deltaTime = clock.getDelta();
+
+    renderer.render( scene, camera );
+
+    requestAnimationFrame( renderFrame );
+
+}
+```
+
+##### - Invoke the function in start() method
+
+Don't forget to invoke the function in the start() method 
+`
+function start ()
+{
+    setupPhysicsWorld();
+    setupGraphics();
+    renderFrame();
+}
+`
+
+When running in web browser with live server, it should return the view like this 
+
+![First view](./images/View1.jpg)
+
+#### 3. Rigid Body and Collision Shape 
+
+#### 4. Collision Filtering
+ 
+#### 5. Adding Constraints 
+
