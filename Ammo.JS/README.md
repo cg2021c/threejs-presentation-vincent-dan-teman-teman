@@ -6,6 +6,8 @@
 * [Terms in Ammo.js](#terms-in-ammo.js)
 * [Coding and Explanation](#coding-and-explanation)
 
+---
+
 ## Introduction to Ammo.js
 
 ### What is Ammo.js 🤔
@@ -18,6 +20,8 @@ Ammo.js is one of the most powerful JavaScript Physics Engine available, created
 - **Ammo** actually stands for "Avoided Making My Own js physics engine by compiling BulletJs from C++". (No Jokes, try searching for it)
 
 - The creator of Ammo.js is never stated, but the code can be found in the [Github Repository](https://github.com/kripken/ammo.js) created by an user **kripken** with 40+ Authors which contribute in the creation of this engine.
+
+---
 
 ## Terms in Ammo.js
 
