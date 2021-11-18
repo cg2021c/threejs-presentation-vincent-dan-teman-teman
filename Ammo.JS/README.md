@@ -329,7 +329,7 @@ function start ()
 
 When running in web browser with live server, it should return the view like this 
 
-![First view](./images/View1.jpg)
+![First View](./images/View1.JPG)
 
 #### 3. Rigid Body and Collision Shape 
 
