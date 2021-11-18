@@ -104,12 +104,18 @@ The types of joints supported by Ammo.js
 #### Point to Poimt (P2P
 Point to point constraint limits the translation so that the local pivot points of two rigid bodies match in worldspace. A chain of rigid bodies can be connected using this constraint.
 
+![P2P Constraint](./images/P2P.png)
 
 #### Hinge Constraints
 Hinge constraint/ Revolute joint restricts two additional angular degrees of freedom, so the body can only rotate around one axis, the hinge axis. This can be useful to represent doors or wheels rotating around one axis.
 
+![Hinge Constraint](./images/Hinge.png)
+
 #### Slider Constraints
 The slider constraint allows the body to rotate around one axis and translate along this axis.
 
+![Slider Constraint](./images/Slider.png)
+
 #### Cone Twist Constraints
 This is a special point to point constraint that adds cone and twist axis limits. x-axis serves as a twist axis. This is useful for making joints like the upper arm’s joint.
+
