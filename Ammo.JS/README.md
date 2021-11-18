@@ -1,7 +1,7 @@
 # Introduction to Physical Simulations with Three.js and Ammo.js
 
 ## Contents of the Presentation
-- [Introduction to Ammo.js ](#introduction-to-ammo.js)
+- [Introduction to Ammo.js](#introduction-to-ammo.js)
 - [Terms in Ammo.js](#terms-in-ammo.js)
 - [Coding and Explanation]()
 
