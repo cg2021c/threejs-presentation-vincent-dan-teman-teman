@@ -1,9 +1,9 @@
 # Introduction to Physical Simulations with Three.js and Ammo.js
 
 ## Contents of the Presentation
-- [Introduction to Ammo.js](#introduction-to-ammo.js)
-- [Terms in Ammo.js](#terms-in-ammo.js)
-- [Coding and Explanation]()
+* [Introduction to Ammo.js](#introduction-to-ammo.js)
+* [Terms in Ammo.js](#terms-in-ammo.js)
+* [Coding and Explanation]()
 
 ## Introduction to Ammo.js
 ### What is Ammo.js 🤔
@@ -73,5 +73,43 @@ Kinematic objects are static objects that can be moved by the user. The object w
 Example :
 - A Floating Block in Minecraft
 
+---
+
 ### Collision
+Collision happens when two or more object encounters resulting in exchange or transformation of energy. In this Physics, there are 2 topics that covers the collision
+
+#### Collision Detection
+Collision Detection is about detecting when two or more objects collide.
+Example :
+- Deducting the health of the boss for every successful attack (The sword/bullet collide with the boss body).
+
+#### Collision Filtering
+Collision Filtering sets which objects should collide and which should not. This is important to set an object which can collide and which doesn't. In Ammo.js, *Masks* is used for this kind of condition.<br>
+Every rigid body in ammo.js has a bitwise masks collision group and collision mask. The collision group represents the collision identity group of the rigid body while the collision mask represents other collision identity groups that should be collided with. 
+
+Principal of Collision in Ammo.js is "**collision between two object can only occur if a bitwise AND operation between the collision mask of A and the collision group of B is anything but zero and vice versa.**"
+
+Rigid Body  | Collision Group    | Collision Mask
+------------|--------------------|----------------
+A | 0010 | 0001
+B | 0011 | 0010
+C | 0101 | 0011
+
+Can you determine which Rigid Body will collide and which won't?
+
 ### Constraints
+A constraint component connects two rigid bodies together or connects a rigid body to a static point in the world. 
+<br>
+The types of joints supported by Ammo.js 
+#### Point to Poimt (P2P
+Point to point constraint limits the translation so that the local pivot points of two rigid bodies match in worldspace. A chain of rigid bodies can be connected using this constraint.
+
+
+#### Hinge Constraints
+Hinge constraint/ Revolute joint restricts two additional angular degrees of freedom, so the body can only rotate around one axis, the hinge axis. This can be useful to represent doors or wheels rotating around one axis.
+
+#### Slider Constraints
+The slider constraint allows the body to rotate around one axis and translate along this axis.
+
+#### Cone Twist Constraints
+This is a special point to point constraint that adds cone and twist axis limits. x-axis serves as a twist axis. This is useful for making joints like the upper arm’s joint.
