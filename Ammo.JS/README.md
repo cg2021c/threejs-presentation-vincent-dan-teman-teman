@@ -2,8 +2,8 @@
 
 ## Contents of the Presentation
 
-* [Introduction to Ammo.js](#introduction-to-ammo.js)
-* [Terms in Ammo.js](#terms-in-ammo.js)
+* [Introduction to Ammo.js](#introduction-to-ammojs)
+* [Terms in Ammo.js](#terms-in-ammojs)
 * [Coding and Explanation](#coding-and-explanation)
 
 ---
