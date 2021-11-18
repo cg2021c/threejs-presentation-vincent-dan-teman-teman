@@ -327,7 +327,7 @@ function start ()
 }
 `
 
-When running in web browser with live server, it should return the view like this 
+When running in web browser with live server, it should return the view of the background aqua blue 
 
 ![First View](./images/View1.JPG)
 
