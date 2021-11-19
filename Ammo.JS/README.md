@@ -534,6 +534,113 @@ Finally, call `updatePhysics` in the renderFrame method just before the `render.
 ![View2](./images/View3.JPG)
 
 #### 4. Collision Filtering
+
+ Since the scenes are going to be added by another ball is to demonstrate the collision filtering. The steps below must be followed.
+ 
+##### - Declaring variables for the used collision group
+
+On the top of the code together with other variables, declare the collision group variable
+```js
+let colGroupPlane = 1, colGroupWhiteBall = 2, colGroupBlackBall = 4
+```
+
+##### - Create method `createMaskBall()`
+
+Next, create a method/function `createMaskBall()` after the `createBall()` method
+```js
+function createMaskBall(){
+                
+                let pos = {x: 1, y: 30, z: 0};
+                let radius = 2;
+                let quat = {x: 0, y: 0, z: 0, w: 2};
+                let mass = 1;
+
+                //threeJS Section
+                let ball = new THREE.Mesh(new THREE.SphereBufferGeometry(radius), new THREE.MeshPhongMaterial({color: 00000}));
+
+                ball.position.set(pos.x, pos.y, pos.z);
+                
+                ball.castShadow = true;
+                ball.receiveShadow = true;
+
+                scene.add(ball);
+
+
+                //Ammojs Section
+                let transform = new Ammo.btTransform();
+                transform.setIdentity();
+                transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+                transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+                let motionState = new Ammo.btDefaultMotionState( transform );
+
+                let colShape = new Ammo.btSphereShape( radius );
+                colShape.setMargin( 0.05 );
+
+                let localInertia = new Ammo.btVector3( 0, 0, 0 );
+                colShape.calculateLocalInertia( mass, localInertia );
+
+                let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+                let body = new Ammo.btRigidBody( rbInfo );
+
+
+                physicsWorld.addRigidBody( body, colGroupBlackBall, colGroupWhiteBall | colGroupPlane);
+                
+                ball.userData.physicsBody = body;
+                rigidBodies.push(ball);
+            }
+
+```
+
+This method will create a simillar ball but with the position of the ball that has been translated 30 units along the positive y axis and 1 units along the x axis. <br>
+As we can see there is also a difference in the `addRigidBody()` method with this give 3 parameters `addRigidBody( body, colGroupBlackBall, colGroupWhiteBall | colGroupPlane);` instead of just `addRigidBody( body);`. This is due to the first of these two parameters is for the collision group of the rigid body while the second is for the collision mask where the other should collide with, where here means the BlackBall should collide with WhiteBall collision group and the group plane which is the box plane.
+
+##### - Modifying each object's `addRigidBody()` method
+
+As stated above, instead of just returning the `addRigidBody(body)`, the collision which for both balls and the box plane should happen. Therefore, a modification should be make as stated below.
+
+- In the method `createBlock()`, change the code 
+```js
+physicsWorld.addRigidBody(body);
+```
+to
+```js
+physicsWorld.addRigidBody(body, colGroupPlane, colGroupWhiteBall | colGroupBlackBall)
+```
+
+- In the method `createBall()`, change the code 
+```js
+physicsWorld.addRigidBody(body);
+```
+to
+```js
+physicsWorld.addRigidBody( body, colGroupWhiteBall, colGroupPlane | colGroupBlackBall)
+```
+
+##### - Call the `createMaskBall()` method in the `start()` method
+
+Finally, don't ever forget to call the method `createMaskBall()` in the `start()` method so the object can be added into the scene.
+
+```js
+function start (){
+
+                tmpTrans = new Ammo.btTransform();
+
+                setupPhysicsWorld();
+
+                setupGraphics();
+                createBlock();
+                createBall();
+                createMaskBall();
+
+                renderFrame();
+
+            }
+
+```
+
+Finally, the scene should have 2 balls that falls in a different height, and collide with each other as well as the box plane.
+![View3](./images/View2.JPG)
+![View4](./images/View4.JPG)
  
 #### 5. Adding Constraints 
 
@@ -629,6 +736,7 @@ function createJointObjects(){
     physicsWorld.addConstraint( p2p, false );
 }
 ```
+
 This code demonstrate the joints as it will create a ball and a sphere below swirling around. What this program does is creating pivot points for the respective objects where the joining would be established and should be relative to the origin of the object. A point2point (P2P) constraint was created next by passing the two objects and also their respective pivot points to its constructor.<br>
 
 ##### - Call the createJoinObject method in start() method
