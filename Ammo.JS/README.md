@@ -381,7 +381,7 @@ The next step should be creating the boxplane and the ball which the physics sim
 function createBlock(){
     
     let pos = {x: 0, y: 0, z: 0};
-    let scale = {x: 50, y: 2, z: 50};
+    let scale = {x: 80, y: 2, z: 80};
     let quat = {x: 0, y: 0, z: 0, w: 1};
     let mass = 0;
 
@@ -537,3 +537,121 @@ Finally, call `updatePhysics` in the renderFrame method just before the `render.
  
 #### 5. Adding Constraints 
 
+For demonstrating adding constraints, the steps are
+
+##### - Create method `createJoinObject()` 
+This method should be added to the code right after the `createMaskBall()` method with the code below.
+```js
+function createJointObjects(){
+    
+    let pos1 = {x: -1, y: 15, z: 0};
+    let pos2 = {x: -1, y: 10, z: 0};
+
+    let radius = 2;
+    let scale = {x: 5, y: 2, z: 2};
+    let quat = {x: 0, y: 0, z: 0, w: 1};
+    let mass1 = 0;
+    let mass2 = 1;
+
+    let transform = new Ammo.btTransform();
+
+    //Sphere Graphics
+    let ball = new THREE.Mesh(new THREE.SphereBufferGeometry(radius), new THREE.MeshPhongMaterial({color: 0xb846db}));
+
+    ball.position.set(pos1.x, pos1.y, pos1.z);
+
+    ball.castShadow = true;
+    ball.receiveShadow = true;
+
+    scene.add(ball);
+
+
+    //Sphere Physics
+    transform.setIdentity();
+    transform.setOrigin( new Ammo.btVector3( pos1.x, pos1.y, pos1.z ) );
+    transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+    let motionState = new Ammo.btDefaultMotionState( transform );
+
+    let sphereColShape = new Ammo.btSphereShape( radius );
+    sphereColShape.setMargin( 0.05 );
+
+    let localInertia = new Ammo.btVector3( 0, 0, 0 );
+    sphereColShape.calculateLocalInertia( mass1, localInertia );
+
+    let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass1, motionState, sphereColShape, localInertia );
+    let sphereBody = new Ammo.btRigidBody( rbInfo );
+
+    physicsWorld.addRigidBody( sphereBody, colGroupGreenBall, colGroupRedBall );
+
+    ball.userData.physicsBody = sphereBody;
+    rigidBodies.push(ball);
+    
+
+    //Block Graphics
+    let block = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({color: 0xf78a1d}));
+
+    block.position.set(pos2.x, pos2.y, pos2.z);
+    block.scale.set(scale.x, scale.y, scale.z);
+
+    block.castShadow = true;
+    block.receiveShadow = true;
+
+    scene.add(block);
+
+
+    //Block Physics
+    transform.setIdentity();
+    transform.setOrigin( new Ammo.btVector3( pos2.x, pos2.y, pos2.z ) );
+    transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+    motionState = new Ammo.btDefaultMotionState( transform );
+
+    let blockColShape = new Ammo.btBoxShape( new Ammo.btVector3( scale.x * 0.5, scale.y * 0.5, scale.z * 0.5 ) );
+    blockColShape.setMargin( 0.05 );
+
+    localInertia = new Ammo.btVector3( 0, 0, 0 );
+    blockColShape.calculateLocalInertia( mass2, localInertia );
+
+    rbInfo = new Ammo.btRigidBodyConstructionInfo( mass2, motionState, blockColShape, localInertia );
+    let blockBody = new Ammo.btRigidBody( rbInfo );
+
+    physicsWorld.addRigidBody( blockBody, colGroupGreenBall, colGroupRedBall );
+    
+    block.userData.physicsBody = blockBody;
+    rigidBodies.push(block);
+
+
+
+    //Create Joints
+    let spherePivot = new Ammo.btVector3( 0, - radius, 0 );
+    let blockPivot = new Ammo.btVector3( - scale.x * 0.5, 1, 1 );
+
+    let p2p = new Ammo.btPoint2PointConstraint( sphereBody, blockBody, spherePivot, blockPivot);
+    physicsWorld.addConstraint( p2p, false );
+}
+```
+This code demonstrate the joints as it will create a ball and a sphere below swirling around. What this program does is creating pivot points for the respective objects where the joining would be established and should be relative to the origin of the object. A point2point (P2P) constraint was created next by passing the two objects and also their respective pivot points to its constructor.<br>
+
+##### - Call the createJoinObject method in start() method
+
+Never forget to call `createJoinObject()` after the `setupGraphics()` method and before the `renderFrame()` method.
+```js
+ function start (){
+
+                tmpTrans = new Ammo.btTransform();
+
+                setupPhysicsWorld();
+
+                setupGraphics();
+                createBlock();
+                createBall();
+                createMaskBall();
+                createJoinObject();
+
+                renderFrame();
+                }
+```
+
+The Final Result should be a view like the image below
+![View Final](./images/View5.JPG)
+
+The Final Code can be found [Here](https://gist.github.com/vincentyonathan/bd94a2d3c2c9a88927c52601d98831a4)
