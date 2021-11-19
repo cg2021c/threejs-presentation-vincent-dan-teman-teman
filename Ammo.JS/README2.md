@@ -689,6 +689,6 @@ function renderFrame() {
 
 Our code implementation is now done, you can now try to move these two objects and see the interactions.
 
-![ballboxgif](ballbox.gif)
+![ballboxgif](./images/ballbox.gif)
 
 Full code implementation can be found [here](https://gist.github.com/christianbennett/b5a6f7c70f3dad336e9c1db2dbdca83f)
