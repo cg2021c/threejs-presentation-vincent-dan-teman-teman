@@ -227,30 +227,43 @@ This function is used to implement a broad phase algorithm. Broad phase algorith
 
 ###### Ammo.btDefaultCollisionConfiguration
 
-The function is used to implement collision configuration which allows to fine tune the algorithms used for the full (not broadphase) collision detection.
+The function is used to implement collision configuration which allows to fine tune the algorithms used for the full collision detection.
 
 ###### Ammo.btCollisionDispatcher
 
-The class collision dispatcher is used to register a callback that filters overlapping broadphase proxies so that the collisions are not processed by the rest of the system.
+The class collision dispatcher is used to register a callback so that the collisions are not processed by the rest of the system.
 
 ###### Ammo.btSequentialImpulseConstraintSolver
 
-This class is what causes the objects to interact properly, taking into account gravity, game logic supplied forces, collisions, and hinge constraints.
+This class is what causes the objects to interact properly to a physical simulation happening with the object.
 
 ###### Ammo.btDiscreteDynamicsWorld
 
-This is the dynamic world, our physics world. It does come in other variants like ```js Ammo.btSoftRigidDynamicsWorld``` for soft body simulation.
-From the last line we can see where we set the gravity of our world by calling ```js setGravity()``` method of physicsWorld and passing in an `ammojs vector3` for the gravity. 
+This is the dynamic world, our physics world. It does come in other variants like 
+```js 
+Ammo.btSoftRigidDynamicsWorld
+``` 
+for soft body simulation.
+From the last line we can see where we set the gravity of our world by calling 
+```js 
+setGravity()
+``` 
+method of physicsWorld and passing in an `ammojs vector3` for the gravity. 
 
 ##### - Add the call to the start() method 
 
-Add a call in the empty start() ```js setupPhysicsWorld()``` 
+Add a call in the empty start() 
+```js 
+setupPhysicsWorld()
+``` 
 
 ##### - Add the function to Setup Graphics
 
 Add a Three.js environment to add visuals by adding *scene*, *camera* and *renderer* above the ammo.js initialization
 
-```js let physicsWorld, scene, camera, renderer;```
+```js 
+let physicsWorld, scene, camera, renderer;
+```
 
  After the function `setupPhysicsWorld`, add the function `setupGraphics()`
 
@@ -332,6 +345,190 @@ When running in web browser with live server, it should return the view of the b
 ![First View](./images/View1.JPG)
 
 #### 3. Rigid Body and Collision Shape 
+
+As stated before, rigid body is idealised representation of a body which moves, collides, has a mass and has an impulse applied to it. The important thing about the connection between rigid body and physical world is there has to be some kind of physical object which interacts with another object.<br>
+
+The demonstration is making a simulation about creating a box plane model with a sphere falling from a height determined by users. Logically, there are two requirements about the box plane and sphere to this kind of model
+
+- The box plane is made with box collision shape, and it should be static. Thus, the mass of the box plane should be 0.
+
+- The sphere, which is a dynamic rigid body that are affected by gravity and other physical simulation should be given the mass bigger than 0.
+
+Therefore, the steps that need to be followed are
+
+##### - Declare the variable for rigid body
+
+On the top of the code, declare the variable for rigid body in form of an array.
+```js
+rigidBodies = [], tmpTrans;
+```
+
+##### - Calling the transformation method inside the start() method
+
+Next, inside the start() method, add the following code 
+```js
+tmpTrans = new Ammo.btTransform()
+```
+
+This code will serve as a collection for all three.js mesh and updated at each render loop. `tmpTrans` is used to temporarily transform objects that will be reused.
+
+
+##### - Adding Function to create the box plane and the ball
+
+The next step should be creating the boxplane and the ball which the physics simulation will take place
+
+```js
+function createBlock(){
+    
+    let pos = {x: 0, y: 0, z: 0};
+    let scale = {x: 50, y: 2, z: 50};
+    let quat = {x: 0, y: 0, z: 0, w: 1};
+    let mass = 0;
+
+    //threeJS Section
+    let blockPlane = new THREE.Mesh(new THREE.BoxBufferGeometry(), new THREE.MeshPhongMaterial({color: 0x7a7a7a}));
+
+    blockPlane.position.set(pos.x, pos.y, pos.z);
+    blockPlane.scale.set(scale.x, scale.y, scale.z);
+
+    blockPlane.castShadow = true;
+    blockPlane.receiveShadow = true;
+
+    scene.add(blockPlane);
+
+
+    //Ammojs Section
+    let transform = new Ammo.btTransform();
+    transform.setIdentity();
+    transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+    transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+    let motionState = new Ammo.btDefaultMotionState( transform );
+
+    let colShape = new Ammo.btBoxShape( new Ammo.btVector3( scale.x * 0.5, scale.y * 0.5, scale.z * 0.5 ) );
+    colShape.setMargin( 0.05 );
+
+    let localInertia = new Ammo.btVector3( 0, 0, 0 );
+    colShape.calculateLocalInertia( mass, localInertia );
+
+    let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+    let body = new Ammo.btRigidBody( rbInfo );
+
+
+    physicsWorld.addRigidBody( body );
+}
+
+
+function createBall(){
+    
+    let pos = {x: 0, y: 20, z: 0};
+    let radius = 2;
+    let quat = {x: 0, y: 0, z: 0, w: 1};
+    let mass = 1;
+
+    //threeJS Section
+    let ball = new THREE.Mesh(new THREE.SphereBufferGeometry(radius), new THREE.MeshPhongMaterial({color: 0xffffff}));
+
+    ball.position.set(pos.x, pos.y, pos.z);
+    
+    ball.castShadow = true;
+    ball.receiveShadow = true;
+
+    scene.add(ball);
+
+
+    //Ammojs Section
+    let transform = new Ammo.btTransform();
+    transform.setIdentity();
+    transform.setOrigin( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
+    transform.setRotation( new Ammo.btQuaternion( quat.x, quat.y, quat.z, quat.w ) );
+    let motionState = new Ammo.btDefaultMotionState( transform );
+
+    let colShape = new Ammo.btSphereShape( radius );
+    colShape.setMargin( 0.05 );
+
+    let localInertia = new Ammo.btVector3( 0, 0, 0 );
+    colShape.calculateLocalInertia( mass, localInertia );
+
+    let rbInfo = new Ammo.btRigidBodyConstructionInfo( mass, motionState, colShape, localInertia );
+    let body = new Ammo.btRigidBody( rbInfo );
+
+
+    physicsWorld.addRigidBody( body );
+    
+    ball.userData.physicsBody = body;
+    rigidBodies.push(ball);
+}
+```
+
+At the **Ammo.js** section, first, a rigid body is created and set to transform through the code `Ammo.btTransform` object from which the motion state was created which help obtain the transform of a physics body and to equally set it. Next, a collision shape is created by passing in the respective dimensions of the three.js objects which is Box shape for the block and Sphere for the ball. <br>
+
+The essence of these objects is to be able to create multiple rigid bodies with the same properties.<br>
+
+For the `createBall` method, after the rigid body is added to the physics world, it is also added to the `userData` object property of the three.js ball created.
+
+
+##### - Adding the function to update physics for each rigid body
+
+Below the final method created, add the function updatePhysics()
+```js
+function updatePhysics( deltaTime ){
+
+    physicsWorld.stepSimulation( deltaTime, 10 );
+
+    // Update rigid bodies
+    for ( let i = 0; i < rigidBodies.length; i++ ) {
+        let objThree = rigidBodies[ i ];
+        let objAmmo = objThree.userData.physicsBody;
+        let ms = objAmmo.getMotionState();
+        if ( ms ) {
+
+            ms.getWorldTransform( tmpTrans );
+            let p = tmpTrans.getOrigin();
+            let q = tmpTrans.getRotation();
+            objThree.position.set( p.x(), p.y(), p.z() );
+            objThree.quaternion.set( q.x(), q.y(), q.z(), q.w() );
+
+        }
+    }
+```
+Before, it is stated that in the `createBall` method, the rigid body is added to the `userData` object property after it is added to physics world. This is because this three.js ball is in turn added to the `rigidBodies` array so it can be retrieved when updating objects after a physics simulation. As the elapsed time is passed as a parameter to be sent to the `stepSimulation` method, it runs a simulation for the elapsed time updating the various transforms of the respective physics bodies. Then it will  loop through the `rigidBodies` array for each three.js object associated with ammo.js rigid body, obtain the world transform and finally apply the obtained transform to the three.js.
+
+##### - Call the createBall and createBallMasks in start() method
+
+Calling the `createBall` and `createBallMasks` after the `setupGraphics()` method and before the `renderFrame()` method.
+```js
+ function start (){
+
+                tmpTrans = new Ammo.btTransform();
+
+                setupPhysicsWorld();
+
+                setupGraphics();
+                createBlock();
+                createBall();
+                createMaskBall();
+
+                renderFrame();
+
+            }
+```
+
+##### - Update the renderFrame() method
+
+Finally, call `updatePhysics` in the renderFrame method just before the `render.render(…)` function statement by passing in the `deltaTime` variable to it.
+```js
+ function renderFrame(){
+
+                let deltaTime = clock.getDelta();
+
+                updatePhysics( deltaTime );
+
+                renderer.render( scene, camera );
+
+                requestAnimationFrame( renderFrame );
+
+            }            
+```
 
 #### 4. Collision Filtering
  
