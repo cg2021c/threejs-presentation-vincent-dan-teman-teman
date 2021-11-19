@@ -331,14 +331,14 @@ function renderFrame(){
 ##### - Invoke the function in start() method
 
 Don't forget to invoke the function in the start() method 
-`
+```js
 function start ()
 {
     setupPhysicsWorld();
     setupGraphics();
     renderFrame();
 }
-`
+```
 
 When running in web browser with live server, it should return the view of the background aqua blue 
 
