@@ -472,7 +472,7 @@ let kObject = null,
   tmpQuat = new THREE.Quaternion();
 ```
 
-`kObject` will be our handle to the kinematic object while `kMoveDirectio`, just like `moveDirection` will hold the keypress direction for moving the kinematic object. `tmpPos` and `tmpQuat` are temporary vector and quaternion respectively.
+`kObject` will be our handle to the kinematic object while `kMoveDirection`, just like `moveDirection` will hold the keypress direction for moving the kinematic object. `tmpPos` and `tmpQuat` are temporary vector and quaternion respectively.
 
 Still in this section, we're going to add `const FLAGS = { CF_KINEMATIC_OBJECT: 2 }`
 
