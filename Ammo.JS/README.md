@@ -530,6 +530,9 @@ Finally, call `updatePhysics` in the renderFrame method just before the `render.
             }            
 ```
 
+##### The final result for this section will be a white ball that is standing on a box plane
+![View2](./images/View3.JPG)
+
 #### 4. Collision Filtering
  
 #### 5. Adding Constraints 
