@@ -433,7 +433,7 @@ let deltaTime = clock.getDelta();
 
 `renderFrame()` should now look like:
 
-```
+```js
 function renderFrame(){
    let deltaTime = clock.getDelta();
    moveBall();
