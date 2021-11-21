@@ -15,7 +15,7 @@
 Oimo.js is a lightweight 3d physics engine for JavaScript. It's a full javascript conversion of OimoPhysics. Originally created by Saharan for actionscript 3.0.
 
 - It is really simple to use
-- Lack of Documentation. (Still in progress it says)
+- Lack of Documentation. (Still in progress it says). Oimo Physics has similiar syntax and use
 
 - [Github Docs](https://github.com/lo-th/Oimo.js/)
 - [Oimo.js Demo](http://lo-th.github.io/Oimo.js/#basic)
