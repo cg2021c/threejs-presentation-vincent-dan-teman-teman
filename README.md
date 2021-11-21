@@ -8,7 +8,7 @@ Frans Wijaya | 05111940000098
 Vincent Yonathan | 05111940000186
 Christian Bennett | 05111940000078
 Adrian | 05111940000130
-Bill Harit | 0511194000
+Bill Harit | 05111940000114
 Jason Gunawan | 05111940000085
 
 ## Introduction to Physics in Three.js
