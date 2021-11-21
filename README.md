@@ -4,12 +4,12 @@ Group 8 : Vincent dan teman teman
 
 Members  | NRP  | 
 ---------|------
-Frans Wijaya | 0511194000
+Frans Wijaya | 05111940000098
 Vincent Yonathan | 05111940000186
 Christian Bennett | 05111940000078
-Adrian Santoso | 0511194000
+Adrian | 05111940000130
 Bill Harit | 0511194000
-Jason Gunawan | 0511194000
+Jason Gunawan | 05111940000085
 
 ## Introduction to Physics in Three.js
 Physics is the natural science that studies matter, its fundamental constituents, its motion and behavior through space and time, and the related entities of energy and force.
