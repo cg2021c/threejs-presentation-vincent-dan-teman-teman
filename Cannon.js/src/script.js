@@ -106,6 +106,8 @@ function init() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setAnimationLoop(animation);
+  
+  // Add it to html
   document.body.appendChild(renderer.domElement);
 }
 
