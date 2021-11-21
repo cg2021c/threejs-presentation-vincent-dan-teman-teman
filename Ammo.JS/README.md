@@ -638,9 +638,8 @@ function start (){
 
 ```
 
-Finally, the scene should have 2 balls that falls in a different height, and collide with each other as well as the box plane.
-![View3](./images/View2.JPG)
-![View4](./images/View4.JPG)
+Finally, the scene should have 2 balls that falls in a different height, and collide with each other as well as the box plane.<br>
+![View3](./images/ViewCollision.gif)
  
 #### 5. Adding Constraints 
 
@@ -759,7 +758,7 @@ Never forget to call `createJoinObject()` after the `setupGraphics()` method and
                 }
 ```
 
-The Final Result should be a view like the image below
-![View Final](./images/View5.JPG)
+The Final Result should be a view like the gif below<br>
+![View Final](./images/View5.gif)
 
 The Final Code can be found [Here](https://gist.github.com/vincentyonathan/bd94a2d3c2c9a88927c52601d98831a4)
