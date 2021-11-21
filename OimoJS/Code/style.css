@@ -9,3 +9,11 @@
     background: #fff;
     font: 30px sans-serif;
   }
+
+  h1{
+    padding: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    text-align: center;
+    background-color: black;
+  }
