@@ -35,11 +35,42 @@ World is the container of physics simulation.
 - **gravity** (an array to define the start gravity [ x, y, z ])
 
 #### Function
-- world.step() 
-- world.clear()
-- world.getinfo()
-- world.setgravity( [ x, y, x] )
-- world.add({})
+- world.step() Proceed only time step seconds time of World
+- world.clear() Reset the world and remove all rigid bodies, shapes, joints and any object from the world
+- world.getinfo() return string of simulation statistic if enable
+- world.setgravity( [ x, y, x] ) set array world gravity 
+- world.add({}) add someting to world, return 
+
+#### Example
+```javascript
+world = new OIMO.World({ 
+    timestep: 1/60, 
+    iterations: 8, 
+    broadphase: 2, // 1 brute force, 2 sweep and prune, 3 volume tree
+    worldscale: 1, // scale full world 
+    random: true,  // randomize sample
+    info: false,   // calculate statistic or not
+    gravity: [0,-9.8,0] 
+});
+```
+
+### Object or Joint
+
+Object is a physical object that resides in the world such as Sphere, Box, Cylinder.
+
+#### Attribute
+```javascript
+    type:'sphere', // type of shape : sphere, box, cylinder 
+    size:[1,1,1], // size of shape
+    pos:[0,0,0], // start position in degree
+    rot:[0,0,90], // start rotation in degree
+    move:true, // dynamic or statique
+    density: 1,
+    friction: 0.2,
+    restitution: 0.2,
+    belongsTo: 1, // The bits of the collision groups to which the shape belongs.
+    collidesWith: 0xffffffff // The bits of the collision groups with which the shape collides.
+```
 
 ## Coding and Explanation
 
