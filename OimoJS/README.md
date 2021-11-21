@@ -274,7 +274,7 @@ animate();
 ```
 
 The Final Result should be a view like the gif below<br>
-Note : in your code the color would be black because there is no image file for the texture
+Note : in your code the color would be black because there is no image file for the texture <br><br>
 ![View Final](Code/img/final.gif)
 
 The Final Code cane be found [Here](https://github.com/cg2021c/threejs-presentation-vincent-dan-teman-teman/blob/8c6c50878cdeb8f4ecb475648325a953c615eab9/OimoJS/Code/index.js)
