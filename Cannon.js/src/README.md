@@ -67,6 +67,7 @@ document.body.appendChild(renderer.domElement);
 ```
 
 ## Step 5 Setting up the game
+![addLayer](../assets/addLayer.png)
 To make this game works, we need to prepare the initial function to set up the first box and then call a speific function to keep recreating new boxes while cutting their size and lifting the camera views.
 Here is the function "AddLayer" to add new box layers on top of the old ones.
 ```js
@@ -167,6 +168,7 @@ function splitBlockAndAddNextOneIfOverlaps() {
 ```
 
 ## Pyhsics Explanation
+![fallingBox](../assets/fallingBox.png)
 The last part is adding physics to our animation with cannon.js. The physics will be mainly used to animate the falling boxes. Because cannon.js simulates the physics actions, then its world need to be initialized first.
 ```js
 world = new CANNON.World();
