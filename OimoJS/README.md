@@ -54,9 +54,9 @@ world = new OIMO.World({
 });
 ```
 
-### Object or Joint
+### Rigid Body
 
-Object is a physical object that resides in the world such as Sphere, Box, Cylinder.
+Rigid Body is a physical object that resides in the world such as Sphere, Box, Cylinder.
 
 #### Attribute
 ```javascript
