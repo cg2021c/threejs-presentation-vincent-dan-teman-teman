@@ -32,7 +32,7 @@ Games like Grand Theft Auto V, Black Myth, Red Dead Redemption and God Of War.
 ![Red Dead Redemption](./Ammo.JS/images/God_of_War_4_cover.jpg)
 ![God Of War](./Ammo.JS/images/Red_Dead_Redemption.jpg)
 
-Those games will implement dozens of Physical Laws to make a stunning view and/or effects. Let’s say in Grand Theft Auto V, the cars have a break and gas to stop and move which implements the Physics Law of Linear Movement. Or falling from a building that will pull the player toward the center of the plane, which obeys the Gravitational Law of Physics. Or just simply get crashed by a car or punched by people, the system will be able to detect what is called a collision. Even a simple game like Tetris, Pacman both obeys the laws of Physics.
+Those games will implement dozens of Physical Laws to make a stunning view and/or effects. Let’s say in Grand Theft Auto V, the cars have a break and gas to stop and move which implements the Physics Law of Linear Movement.
 
 Whilst, some game modes purposely don’t obey the law of Physics like Creative Mode in Minecraft where the player can fly or create a block way high above the sky or in the sea without the block falling. It was all made to have some fun that we can’t have in the real world. Without further ado, let’s dive into some of it in three.js.
 
