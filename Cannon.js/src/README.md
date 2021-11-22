@@ -77,6 +77,14 @@ function addLayer(x, z, width, depth, direction) {
   stack.push(layer);
 }
 ```
+To separate the generation between the falling boxes and stationary ones, we need to build a new function that will tell function "generateBox" if the box is a falling one or not.
+```js
+function addOverhang(x, z, width, depth) {
+  const y = boxHeight * (stack.length - 1); // Add the new box one the same layer
+  const overhang = generateBox(x, y, z, width, depth, true);
+  overhangs.push(overhang);
+}
+```
 Notice that this function also call the "GenerateBox" function to construct new boxes.
 ```js
 function generateBox(x, y, z, width, depth, falls) {
@@ -107,5 +115,112 @@ function generateBox(x, y, z, width, depth, falls) {
   };
 }
 ```
+Next is configuring how the boxes will split if they overlap. Here, we build "splitBlockAndAddNextOneIfOverlaps" function to calculate the size of the split, center coordinate of splitted box, construct a new overhang box (the falling one)
+, and add a new layer of box on top of the old ones.
+```js
+function splitBlockAndAddNextOneIfOverlaps() {
+  if (gameEnded) return;
+
+  const topLayer = stack[stack.length - 1];
+  const previousLayer = stack[stack.length - 2];
+
+  const direction = topLayer.direction;
+
+  const size = direction == "x" ? topLayer.width : topLayer.depth;
+  const delta =
+    topLayer.threejs.position[direction] -
+    previousLayer.threejs.position[direction];
+  const overhangSize = Math.abs(delta);
+  const overlap = size - overhangSize;
+
+  if (overlap > 0) {
+    cutBox(topLayer, overlap, size, delta);
+
+    // Overhang
+    const overhangShift = (overlap / 2 + overhangSize / 2) * Math.sign(delta);
+    const overhangX =
+      direction == "x"
+        ? topLayer.threejs.position.x + overhangShift
+        : topLayer.threejs.position.x;
+    const overhangZ =
+      direction == "z"
+        ? topLayer.threejs.position.z + overhangShift
+        : topLayer.threejs.position.z;
+    const overhangWidth = direction == "x" ? overhangSize : topLayer.width;
+    const overhangDepth = direction == "z" ? overhangSize : topLayer.depth;
+
+    addOverhang(overhangX, overhangZ, overhangWidth, overhangDepth);
+
+    // Next layer
+    const nextX = direction == "x" ? topLayer.threejs.position.x : -10;
+    const nextZ = direction == "z" ? topLayer.threejs.position.z : -10;
+    const newWidth = topLayer.width; // New layer has the same size as the cut top layer
+    const newDepth = topLayer.depth; // New layer has the same size as the cut top layer
+    const nextDirection = direction == "x" ? "z" : "x";
+
+    if (scoreElement) scoreElement.innerText = stack.length - 1;
+    addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
+  } else {
+    missedTheSpot();
+  }
+}
+```
 
 ## Pyhsics Explanation
+The last part is adding physics to our animation with cannon.js. The physics will be mainly used to animate the falling boxes. Because cannon.js simulates the physics actions, then its world need to be initialized first.
+```js
+world = new CANNON.World();
+world.gravity.set(0, -10, 0); // Gravity pulls things down
+world.broadphase = new CANNON.NaiveBroadphase();
+world.solver.iterations = 40;
+```
+The important thing to make sure this combination works well is what exists in Three.js needs to exist in cannon.js as well. That's why, the box also need to be generated to in canno.js. Here is the box generation for cannon.js in "GenerateBox" function. You can see that the mass of the box in cannon.js will be setted up only if it is an overhanging box (falling one).
+```js
+const shape = new CANNON.Box(
+    new CANNON.Vec3(width / 2, boxHeight / 2, depth / 2)
+);
+let mass = falls ? 5 : 0; // If it shouldn't fall then setting the mass to zero will keep it stationary
+mass *= width / originalBoxSize; // Reduce mass proportionately by size
+mass *= depth / originalBoxSize; // Reduce mass proportionately by size
+const body = new CANNON.Body({ mass, shape });
+body.position.set(x, y, z);
+world.addBody(body);
+```
+Let's head to the "cutBox" function. This function will calculate how much part of the box will be splitted and falls. Once again, what happens in three.js also have to happens in cannon.js. That's why, when we cut the rendered box in three.js, we also need to cut the physics box in cannon.js. Unlike three.js, we can't scale (resize) an object's size in cannon.js. To cut the box' size in cannon.js, simply we will remove the old one and make a new smaller one. This is the case where three.js is adjusting things and we need to sync the cannon.js.
+```js
+function cutBox(topLayer, overlap, size, delta) {
+  const direction = topLayer.direction;
+  const newWidth = direction == "x" ? overlap : topLayer.width;
+  const newDepth = direction == "z" ? overlap : topLayer.depth;
+
+  // Update metadata
+  topLayer.width = newWidth;
+  topLayer.depth = newDepth;
+
+  // Update ThreeJS model
+  topLayer.threejs.scale[direction] = overlap / size;
+  topLayer.threejs.position[direction] -= delta / 2;
+
+  // Update CannonJS model
+  topLayer.cannonjs.position[direction] -= delta / 2;
+
+  // Replace shape to a smaller one (in CannonJS you can't simply just scale a shape)
+  const shape = new CANNON.Box(
+    new CANNON.Vec3(newWidth / 2, boxHeight / 2, newDepth / 2)
+  );
+  topLayer.cannonjs.shapes = [];
+  topLayer.cannonjs.addShape(shape);
+}
+```
+Now, to make sure the physics from cannon.js is well synchronized with rendered box in three.js, we need to update the physics calculation every animation loop. Here we call "updatePyhsics" every animation loop. This is the case where cannon.js is adjusting things and we need to sync three.js.
+```js
+function updatePhysics(timePassed) {
+  world.step(timePassed / 1000); // Step the physics world
+
+  // Copy coordinates from Cannon.js to Three.js
+  overhangs.forEach((element) => {
+    element.threejs.position.copy(element.cannonjs.position);
+    element.threejs.quaternion.copy(element.cannonjs.quaternion);
+  });
+}
+```
