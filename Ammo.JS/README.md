@@ -219,36 +219,6 @@ function setupPhysicsWorld()
 
 }
 ```
-The explanation of the code above are :
-
-###### Ammo.btDbvtBroadphase 
-
-This function is used to implement a broad phase algorithm. Broad phase algorithm usually uses the bounding boxes of objects in the world to quickly compute a conservative approximate list of colliding pairs. The list will include every pair of objects that are colliding, but it may also include pairs of objects whose bounding boxes intersect but are still not close enough to collide.
-
-###### Ammo.btDefaultCollisionConfiguration
-
-The function is used to implement collision configuration which allows to fine tune the algorithms used for the full collision detection.
-
-###### Ammo.btCollisionDispatcher
-
-The class collision dispatcher is used to register a callback so that the collisions are not processed by the rest of the system.
-
-###### Ammo.btSequentialImpulseConstraintSolver
-
-This class is what causes the objects to interact properly to a physical simulation happening with the object.
-
-###### Ammo.btDiscreteDynamicsWorld
-
-This is the dynamic world, our physics world. It does come in other variants like 
-```js 
-Ammo.btSoftRigidDynamicsWorld
-``` 
-for soft body simulation.
-From the last line we can see where we set the gravity of our world by calling 
-```js 
-setGravity()
-``` 
-method of physicsWorld and passing in an `ammojs vector3` for the gravity. 
 
 ##### - Add the call to the start() method 
 
