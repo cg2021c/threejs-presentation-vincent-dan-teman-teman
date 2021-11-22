@@ -461,7 +461,6 @@ function updatePhysics( deltaTime ){
         }
     }
 ```
-Before, it is stated that in the `createBall` method, the rigid body is added to the `userData` object property after it is added to physics world. This is because this three.js ball is in turn added to the `rigidBodies` array so it can be retrieved when updating objects after a physics simulation. As the elapsed time is passed as a parameter to be sent to the `stepSimulation` method, it runs a simulation for the elapsed time updating the various transforms of the respective physics bodies. Then it will  loop through the `rigidBodies` array for each three.js object associated with ammo.js rigid body, obtain the world transform and finally apply the obtained transform to the three.js.
 
 ##### - Call the createBall and createBallMasks in start() method
 
