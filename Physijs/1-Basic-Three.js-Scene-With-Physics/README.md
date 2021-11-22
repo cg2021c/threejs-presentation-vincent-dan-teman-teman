@@ -5,7 +5,7 @@
 
 In this example, a scene will be created that's going to simulate domino tiles that will start falling down as soon as the scene is loaded. The complete physics of this scene is managed by Physijs.
 
-The [code](https://github.com/cg2021c/threejs-presentation-vincent-dan-teman-teman/blob/main/Physijs/Code/src/chapter-12/01-dominos.html) 
+The [code](https://github.com/cg2021c/threejs-presentation-vincent-dan-teman-teman/blob/main/Physijs/Code/src/chapter-12/js/12-01.js) 
 and [preview](https://cg2021c.github.io/threejs-presentation-vincent-dan-teman-teman/Physijs/Code/src/chapter-12/01-dominos.html) for this section.
 
 ## Step 1: Define a Physijs scene
