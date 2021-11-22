@@ -16,5 +16,3 @@ DOFConstraint | DOFConstraint allows you to specify the limit of movement around
 The easiest way to understand these constraints is to see them in action and
 play around with them. For this, we’ve provided a couple of examples where
 these constraints are used.
-
-Next, we will discuss further about each constraint above. We've also provided with several source codes where these constraints are implemented.
