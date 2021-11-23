@@ -400,7 +400,7 @@ function start() {
 
 Now to actually move the ball we have to:
 
-- first resolve the directions set in `moveDirection` variable
+- first, resolve the directions set in `moveDirection` variable
 - set a vector with the resolved directions
 - multiply the vector by a scaling factor
 - then apply the vector as the linear velocity of the ball's rigid body
@@ -548,11 +548,14 @@ Your `start()` method should currently look like this:
 ```js
 function start() {
   tmpTrans = new Ammo.btTransform();
+  
   setupPhysicsWorld();
+  
   setupGraphics();
   createBlock();
   createBall();
   createKinematicBox();
+  
   setupEventHandlers();
   renderFrame();
 }
